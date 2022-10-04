@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.spec.name}}-service # Name of this service
+  namespace: {{ .Values.spec.name }} # place where I am running and other things I need are
+spec:
+  selector:
+    app: {{.Values.spec.name}} # What APP am I looking for from Deployment
+  type: NodePort #NodePort - Direct to Pod / ClusterIP - To Clusters of Pods. LB is best one to use with this ingress
+  ports:
+  - port: {{ .Values.service.port }} # Web port - usually 80. Ingress handles HTTP/HTTPS
+    targetPort: {{ .Values.service.targetPort }} # Exposed port on Container (3000 with Node)

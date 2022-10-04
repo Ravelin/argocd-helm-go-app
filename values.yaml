@@ -1,0 +1,27 @@
+replicaCount: 2
+image:
+    pullPolicy: Always
+    tag: ""
+serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+service:
+    type: LoadBalancer
+    port: 80
+    targetPort: 9010
+    annotations: {}
+autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+
+spec:
+    name: example-app
+    ingress:
+        host: api.splat.digital
+        type: alb
+    annotations:
+        scheme: internet-facing
+        target-type: instance
+        tags: Environment=staging

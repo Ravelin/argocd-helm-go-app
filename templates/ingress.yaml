@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.spec.name }}-ingress
+  namespace: {{ .Values.spec.name }}
+  annotations:
+      alb.ingress.kubernetes.io/healthcheck-path: /
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80,"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      external-dns.alpha.kubernetes.io/hostname: {{ .Values.spec.ingress.host }}
+spec:
+  ingressClassName: {{ .Values.spec.ingress.type }}
+  rules:
+    - host: {{ .Values.spec.ingress.host }}
+      http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: {{.Values.spec.name}}-service
+              port:
+                number: 80
+    tls:
+      - hosts:
+        - {{ .Values.spec.ingress.host }}
